@@ -11,7 +11,7 @@
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20250303.0",
 		"typescript": "^5.5.2",
-		"wrangler": "^3.114.0"
+		"wrangler": "^4.105.0"
 	},
 	"dependencies": {
 		"@outerbase/browsable-durable-object": "^0.1.1",
