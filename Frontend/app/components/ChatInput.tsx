@@ -83,30 +83,33 @@ export function ChatInput({
         e.preventDefault();
         onSubmit(e, pendingAssets.map(asset => asset.url));
         setPendingAssets([]); // Clear assets after sending
-      }} className="p-4 border-t border-neutral-300 dark:border-neutral-800">
-        <div className="border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 rounded-lg p-2">
+      }} className="border-t border-neutral-200/80 bg-white/70 p-3 backdrop-blur-xl dark:border-neutral-800/80 dark:bg-neutral-950/70 sm:p-4">
+        <div className="rounded-2xl border border-neutral-200 bg-white/90 p-3 shadow-sm dark:border-neutral-800 dark:bg-neutral-900/90">
           <textarea 
             value={message}
             onChange={(e) => onChange(e.target.value)}
             placeholder="Message #channel-name"
-            className="w-full resize-none bg-transparent focus:outline-none"
-            rows={3}
+            className="min-h-24 w-full resize-none bg-transparent text-sm leading-6 text-neutral-900 outline-none placeholder:text-neutral-400 dark:text-neutral-100 dark:placeholder:text-neutral-500 sm:text-base"
+            rows={4}
             disabled={isSending}
           />
 
           {pendingAssets.length > 0 && (
-            <div className="flex gap-2 mt-2">
+            <div className="mt-3 flex flex-wrap gap-2">
               {pendingAssets.map((asset) => (
                 <div 
                   key={asset.url} 
-                  className="flex items-center gap-1 px-2 py-1 rounded bg-neutral-200 dark:bg-neutral-800"
+                  className="flex items-center gap-1 rounded-full border border-neutral-200 bg-neutral-100 px-3 py-1.5 text-xs text-neutral-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200"
                 >
-                  <span>{asset.filename}</span>
+                  <span className="max-w-40 truncate">{asset.filename}</span>
                   <button
+                    type="button"
                     onClick={() => setPendingAssets(
                       pendingAssets.filter(a => a.url !== asset.url)
                     )}
-                    className="hover:text-neutral-500"
+                    title={`Remove ${asset.filename}`}
+                    aria-label={`Remove ${asset.filename}`}
+                    className="rounded-full px-1 text-neutral-500 transition-colors hover:text-neutral-900 dark:hover:text-neutral-100"
                   >
                     ×
                   </button>
@@ -115,11 +118,13 @@ export function ChatInput({
             </div>
           )}
 
-          <div className="flex justify-end items-center gap-2 mt-2">
+          <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded"
+              title="Upload files"
+              aria-label="Upload files"
+              className="inline-flex items-center justify-center rounded-xl border border-neutral-200 bg-neutral-50 p-2 text-neutral-700 transition-colors hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200 dark:hover:bg-neutral-800"
             >
               <Upload size={16} />
             </button>
@@ -129,17 +134,19 @@ export function ChatInput({
               type="file"
               multiple
               className="hidden"
+              title="Upload files"
+              aria-label="Upload files"
               onChange={(e) => handleFileSelect(e.target.files!)}
             />
 
             <button
               type="submit"
               disabled={isSending || !message.trim()}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-500 px-4 py-2.5 text-sm font-medium text-white shadow-sm shadow-blue-500/20 transition hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
             >
               {isSending ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <div className="h-4 w-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
                   Sending...
                 </>
               ) : (

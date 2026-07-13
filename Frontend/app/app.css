@@ -1,5 +1,28 @@
 @import 'tailwindcss';
 
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background-color: #f8fafc;
+  background-image:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.12), transparent 34%),
+    radial-gradient(circle at top right, rgba(15, 23, 42, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(248, 250, 252, 1));
+  background-attachment: fixed;
+}
+
+.dark body {
+  background-color: #020617;
+  background-image:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.18), transparent 32%),
+    radial-gradient(circle at top right, rgba(15, 23, 42, 0.85), transparent 34%),
+    linear-gradient(180deg, rgba(2, 6, 23, 0.95), rgba(2, 6, 23, 1));
+}
+
 /* Custom variants */
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant interactive (&:where(.interactive, .interactive *));

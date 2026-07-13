@@ -71,21 +71,24 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="w-full max-w-md rounded-lg bg-white text-black p-8 shadow-md">
-        <div>
-          <h2 className="text-center text-3xl font-bold tracking-tight">
+    <div className="flex min-h-screen items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md overflow-hidden rounded-3xl border border-neutral-200/80 bg-white/90 p-6 text-neutral-900 shadow-[0_24px_80px_-24px_rgba(15,23,42,0.35)] backdrop-blur sm:p-8 dark:border-neutral-800 dark:bg-neutral-950/85 dark:text-neutral-100">
+        <div className="space-y-2">
+          <p className="text-center text-xs font-semibold uppercase tracking-[0.24em] text-neutral-500 dark:text-neutral-400">
+            Welcome back
+          </p>
+          <h2 className="text-center text-3xl font-semibold tracking-tight sm:text-4xl">
             Sign in to Chat
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="text-center text-sm text-neutral-600 dark:text-neutral-400">
             Please enter your credentials
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-          <div className="space-y-4 rounded-md shadow-sm">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+          <div className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                 Email Address
               </label>
               <input
@@ -95,12 +98,12 @@ export default function Login() {
                 value={credentials.email}
                 onChange={handleChange}
                 required
-                className="relative block w-full rounded-md border-0 p-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-blue-400 dark:focus:bg-neutral-950 dark:focus:ring-blue-400/10"
                 placeholder="Enter your email"
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                 Password
               </label>
               <input
@@ -110,14 +113,14 @@ export default function Login() {
                 value={credentials.password}
                 onChange={handleChange}
                 required
-                className="relative block w-full rounded-md border-0 p-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-blue-400 dark:focus:bg-neutral-950 dark:focus:ring-blue-400/10"
                 placeholder="Enter your password"
               />
             </div>
           </div>
 
           {error && (
-            <div className="text-red-500 text-sm text-center">
+            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-700 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300">
               {error}
             </div>
           )}
@@ -126,19 +129,19 @@ export default function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50"
+              className="group relative flex w-full justify-center rounded-xl bg-neutral-900 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-neutral-900/15 transition hover:-translate-y-0.5 hover:bg-neutral-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white dark:focus-visible:outline-neutral-100"
             >
               {isLoading ? "Signing in..." : "Sign in"}
             </button>
           </div>
         </form>
 
-        <div className="mt-4 text-center text-sm text-gray-600">
+        <div className="mt-4 text-center text-sm text-neutral-600 dark:text-neutral-400">
           <p>
             Don't have an account?{" "}
             <a
               href="/register"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
+              className="font-medium text-blue-600 transition-colors hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
             >
               Sign up
             </a>

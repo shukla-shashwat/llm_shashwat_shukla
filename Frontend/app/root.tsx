@@ -38,7 +38,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Meta />
             <Links />
         </head>
-        <body className="bg-neutral-50 text-base text-neutral-900 antialiased transition-colors selection:bg-blue-700 selection:text-white dark:bg-neutral-950 dark:text-neutral-100">
+        <body className="min-h-screen overflow-x-hidden text-base text-neutral-900 antialiased transition-colors selection:bg-blue-700 selection:text-white dark:text-neutral-100">
             {children}
             <ScrollRestoration />
             <Scripts />

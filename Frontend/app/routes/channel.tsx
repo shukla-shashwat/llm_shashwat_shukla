@@ -41,26 +41,24 @@ export default function Channel() {
         return userId.slice(0, 2).toUpperCase();
     };
 
-    // Add this function near the top of the component, after the imports
-    const getColorFromName = (name: string) => {
-        // Generate a hash from the name
+    const avatarThemes = [
+        { bg: 'bg-sky-500', text: 'text-white' },
+        { bg: 'bg-emerald-500', text: 'text-white' },
+        { bg: 'bg-violet-500', text: 'text-white' },
+        { bg: 'bg-amber-500', text: 'text-neutral-950' },
+        { bg: 'bg-rose-500', text: 'text-white' },
+        { bg: 'bg-cyan-600', text: 'text-white' },
+        { bg: 'bg-fuchsia-500', text: 'text-white' },
+        { bg: 'bg-lime-500', text: 'text-neutral-950' },
+    ] as const;
+
+    const getAvatarTheme = (name: string) => {
         let hash = 0;
         for (let i = 0; i < name.length; i++) {
             hash = name.charCodeAt(i) + ((hash << 5) - hash);
         }
-        
-        // Convert hash to HSL color
-        // Using HSL ensures good contrast with white text
-        const h = Math.abs(hash % 360);
-        return `hsl(${h}, 70%, 50%)`; // Saturation 70% and Lightness 50% for vibrant but readable colors
-    };
 
-    // Add this function after getColorFromName
-    const getContrastColor = (hsl: string) => {
-        // Extract the lightness value from the HSL string
-        const lightness = parseInt(hsl.split(',')[2].replace('%)', ''));
-        // Use black text for light backgrounds (lightness > 65), white for dark
-        return lightness > 65 ? '#000000' : '#ffffff';
+        return avatarThemes[Math.abs(hash) % avatarThemes.length];
     };
 
     // Find the current channel
@@ -262,7 +260,7 @@ export default function Channel() {
     };
 
     if (!currentChannel) {
-        return <div className="p-4">Channel not found</div>;
+        return <div className="p-6 text-center text-sm text-neutral-500 dark:text-neutral-400">Channel not found</div>;
     }
 
     const handleSubmit = async (e: React.FormEvent, assets: string[]) => {
@@ -317,23 +315,23 @@ export default function Channel() {
     };
 
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex h-full min-h-0 flex-col bg-white/40 dark:bg-neutral-950/30">
             {/* Channel Header */}
-            <div className="flex items-center gap-3 p-4 border-b border-neutral-200 dark:border-neutral-800">
-                <div className="flex-1">
-                    <h1 className="text-lg font-semibold flex items-center gap-2">
+            <div className="flex flex-col gap-4 border-b border-neutral-200/80 px-4 py-4 backdrop-blur-sm dark:border-neutral-800/80 sm:px-5 lg:flex-row lg:items-center lg:justify-between">
+                <div className="min-w-0 flex-1">
+                    <h1 className="flex items-center gap-2 text-lg font-semibold tracking-tight sm:text-xl">
                         {currentChannel.is_private ? (
                             <Lock className="w-5 h-5 text-gray-500" />
                         ) : (
                             <Hash className="w-5 h-5 text-gray-500" />
                         )}
-                        {currentChannel.name}
+                        <span className="truncate">{currentChannel.name}</span>
                     </h1>
-                    <p className="text-sm text-gray-500">
+                    <p className="mt-1 max-w-2xl text-sm text-neutral-500 dark:text-neutral-400">
                         {currentChannel.description || "No description available"}
                     </p>
                 </div>
-                <div className="flex -space-x-2">
+                <div className="flex flex-wrap items-center gap-2 lg:-space-x-2 lg:justify-end lg:gap-0">
                     {users
                         .filter(user => currentChannel.member_ids.includes(user.id))
                         .map(user => (
@@ -342,13 +340,7 @@ export default function Channel() {
                                 className="relative"
                                 title={`${user.first_name} ${user.last_name}`}
                             >
-                                <div 
-                                    className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium bg-blue-500 text-white"
-                                    style={{ 
-                                        backgroundColor: getColorFromName(`${user.first_name} ${user.last_name}`),
-                                        color: getContrastColor(getColorFromName(`${user.first_name} ${user.last_name}`))
-                                    }}
-                                >
+                                <div className={`flex size-8 items-center justify-center rounded-full text-sm font-medium ring-2 ring-white dark:ring-neutral-950 ${getAvatarTheme(`${user.first_name} ${user.last_name}`).bg} ${getAvatarTheme(`${user.first_name} ${user.last_name}`).text}`}>
                                     {getUserInitials(user.id)}
                                 </div>
                                 <div 
@@ -363,22 +355,24 @@ export default function Channel() {
                 <div className="relative" ref={dropdownRef}>
                     <button
                         onClick={() => setShowDropdown(!showDropdown)}
-                        className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full"
+                        title="Channel actions"
+                        aria-label="Channel actions"
+                        className="rounded-full p-2 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
                     >
                         <DotsThree weight="bold" className="w-6 h-6" />
                     </button>
                     
                     {showDropdown && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-neutral-800 rounded-md shadow-lg z-10 py-1">
+                        <div className="absolute right-0 z-10 mt-2 w-52 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-2xl dark:border-neutral-800 dark:bg-neutral-900">
                             <button
                                 onClick={handleInviteUsers}
-                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                                className="w-full px-4 py-2.5 text-left text-sm text-neutral-700 transition-colors hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-800"
                             >
                                 Invite Users
                             </button>
                             <button
                                 onClick={handleLeaveChannel}
-                                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                                className="w-full px-4 py-2.5 text-left text-sm text-red-600 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
                             >
                                 Leave Channel
                             </button>
@@ -388,18 +382,18 @@ export default function Channel() {
             </div>
 
             {/* Message List - Update the structure here */}
-            <div className="flex-1 min-h-0 relative"> {/* Add relative positioning */}
+            <div className="relative flex-1 min-h-0"> {/* Add relative positioning */}
                 <div 
                     ref={messageContainerRef}
                     onScroll={handleScroll}
-                    className="h-full overflow-y-auto p-4"
+                    className="h-full overflow-y-auto px-4 py-4 sm:px-5 sm:py-5"
                 >
                     {isLoadingMessages ? (
                         <div className="flex justify-center items-center h-full">
-                            <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                            <div className="w-6 h-6 rounded-full border-2 border-blue-500 border-t-transparent animate-spin" />
                         </div>
                     ) : (
-                        <div className="space-y-4">
+                        <div className="space-y-4 sm:space-y-5">
                             {localMessages.map((msg) => {
                                 const user = userMap[msg.user_id];
                                 const displayName = user 
@@ -408,39 +402,33 @@ export default function Channel() {
                                 const assets = JSON.parse(msg.assets) as string[];
 
                                 return (
-                                    <div key={msg.id} className="flex items-start group">
+                                    <div key={msg.id} className="group flex items-start gap-3">
                                         {/* Avatar */}
-                                        <div 
-                                            className="w-9 h-9 rounded flex-shrink-0 flex items-center justify-center font-medium"
-                                            style={{ 
-                                                backgroundColor: getColorFromName(displayName),
-                                                color: getContrastColor(getColorFromName(displayName))
-                                            }}
-                                        >
+                                        <div className={`flex size-9 flex-shrink-0 items-center justify-center rounded-full font-medium ring-2 ring-white dark:ring-neutral-950 ${getAvatarTheme(displayName).bg} ${getAvatarTheme(displayName).text}`}>
                                             {getUserInitials(msg.user_id)}
                                         </div>
                                         
                                         {/* Message content */}
-                                        <div className="ml-2 min-w-0 flex-1">
-                                            <div className="flex items-center">
-                                                <span className="font-medium text-gray-900 dark:text-gray-100">
+                                        <div className="min-w-0 flex-1">
+                                            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                                                <span className="font-medium text-neutral-900 dark:text-neutral-100">
                                                     {displayName}
                                                 </span>
-                                                <span className="ml-2 text-xs text-gray-500">
+                                                <span className="text-xs text-neutral-500 dark:text-neutral-400">
                                                     {formatDate(msg.created_at)}
                                                 </span>
                                             </div>
-                                            <p className="text-gray-900 dark:text-gray-100">
+                                            <p className="mt-1 break-words text-sm leading-6 text-neutral-900 dark:text-neutral-100 sm:text-base">
                                                 {msg.content}
                                             </p>
                                             {assets.length > 0 && (
-                                                <div className="mt-2 flex flex-wrap gap-2">
+                                                <div className="mt-3 flex flex-wrap gap-2">
                                                     {assets.map((url, index) => (
                                                         <img 
                                                             key={index}
                                                             src={url}
                                                             alt="Uploaded content"
-                                                            className="max-w-[300px] max-h-[300px] rounded-lg"
+                                                            className="max-h-[280px] w-full max-w-full rounded-2xl border border-neutral-200 object-cover shadow-sm sm:max-w-[300px]"
                                                         />
                                                     ))}
                                                 </div>
@@ -457,7 +445,7 @@ export default function Channel() {
                 {showScrollButton && (
                     <button
                         onClick={scrollToBottom}
-                        className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-600 flex items-center gap-2"
+                        className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-blue-500 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-blue-500/20 transition hover:bg-blue-600"
                     >
                         <ArrowDown weight="bold" className="w-4 h-4" />
                         Scroll to latest

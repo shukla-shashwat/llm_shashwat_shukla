@@ -81,11 +81,11 @@ export const Modal = ({
   if (!isOpen) return null
 
   return (
-    <div className="fixed top-0 left-0 z-50 flex h-screen w-full items-center justify-center bg-transparent p-6">
-      <div className="fade fixed top-0 left-0 h-full w-full bg-black/5 backdrop-blur-[2px]" />
+    <div className="fixed left-0 top-0 z-50 flex h-dvh w-full items-center justify-center p-4 sm:p-6">
+      <div className="fade fixed left-0 top-0 h-full w-full bg-black/30 backdrop-blur-sm" />
 
       <Card
-        className={cn("reveal reveal-sm relative z-50 max-w-md", className)}
+        className={cn("reveal reveal-sm relative z-50 max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto rounded-2xl", className)}
         ref={modalRef}
         tabIndex={-1}
       >
